@@ -47,6 +47,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film addFilm(Film film) {
+        mpaStorage.checkMpaExist(film.getMpa().getId());
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("FILMS")
                 .usingGeneratedKeyColumns("FILM_ID");
@@ -56,7 +57,6 @@ public class FilmDbStorage implements FilmStorage {
         if (film.getGenres() != null) {
             updateGenreForFilm(filmId, film.getGenres());
         }
-
         Film newFilm = getFilmById(filmId);
         log.info("Film added: {}.", newFilm);
         return getFilmById(filmId);
